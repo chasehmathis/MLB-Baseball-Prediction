@@ -1,0 +1,333 @@
+---
+title: "Thinking about Baseball"
+author: "Chase Mathis"
+format: pdf
+editor: visual
+---
+
+## Introduction
+
+When looking at baseball and predicting the results of baseball games, many factors are at play:
+
+-   Who is pitching?
+
+-   Is the star player hurt?
+
+-   Is the baseball team on a hot streak or a cold run?
+
+This is only a few out of many different factors. Sports betting and casino's now don't create lines based off factors, but are lazy and will depend on the [wisdom of the masses](https://www.sportsbettingdime.com/guides/betting-101/how-bookmakers-generate-odds/). They engineer lines to get equal attraction on both sides of the spread and make money off of the margin.
+
+## Importing Packages
+
+```{r}
+#| label: load-packages
+#| warning: false
+
+library(tidyverse) # data wrangling
+library(tidymodels) # modeling
+library(baseballr) # api for baseball data
+library(knitr) # output
+library(patchwork)
+library(corrr) # correlation
+
+
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 15))
+```
+
+### Data
+
+I will retrieve the data from the [baseballr](https://billpetti.github.io/baseballr/) package, where we can scrape data from [baseball-reference.com](https://www.baseball-reference.com/). Instead of looking at one team and predicting off of their statistics (may be done later with a more machine learning approach), I will attempt to make a more general model of which factors make the most predictive model for any baseball team.
+
+I randomly sampled six numbers that correspond to the final standings of last year's season. These will be the teams where I get the data.
+
+```{r}
+#| label: get-standings-rand-choosing
+standings <- read_csv("data/standings.csv") %>% 
+  select(Rk, Tm)
+
+set.seed(123)
+
+randnums <- sample(1:30, 6, replace=FALSE)
+
+standings %>% 
+  filter(Rk %in% randnums) %>% 
+  select(Tm) %>% 
+  kable(col.names = "Teams Randomly Selected")
+```
+
+```{r}
+#| label: pull-team-data
+
+
+teams <- standings %>% 
+  filter(Rk %in% randnums) %>% 
+  select(Tm) %>% 
+  pull()
+
+astros0 <- team_results_bref("HOU", 2021) #baseball reference
+mets0 <- team_results_bref("NYM", 2021) #baseball reference
+marlins0 <- team_results_bref("MIA", 2021) #baseball reference
+nationals0 <- team_results_bref("WSN", 2021) #baseball reference
+pirates0 <- team_results_bref("PIT", 2021) #baseball reference
+diamond0 <- team_results_bref("ARI", 2021) #baseball reference
+
+
+baseball<-bind_rows(astros0,mets0,marlins0,nationals0,pirates0,diamond0)
+```
+
+Our final data frame:
+
+```{r}
+#| label: look-at-one-team
+
+baseball
+
+```
+
+Given that we don't care how each team individually is predicted, I will remove the `Tm` variable. In addition, the `Orig_Scheduled` has no real values so we can remove that. The `Year` variable has no variance (all 2021), so we can remove that.
+
+In addition, I will input a 9 for blank innings and make it a double; create a variable called `margin` that is the margin of victory or defeat; lastly I will remove some levels of the win or loss variable.
+
+Baseball-reference denotes a walk off win differently than a regular win. To make things simpler, I will remove this distinction
+
+```{r}
+#| label: remove-tm-variable
+
+baseball <- baseball %>% 
+  select(-c(Tm,Orig_Scheduled,Year)) %>% 
+  mutate(Inn = as.double(if_else(str_detect(Inn, ""), Inn, "9")),
+         margin = R-RA,
+         Result = if_else(str_detect(Result,"L"), "L", "W"),
+         Won = if_else(Result == "W", 1, 0),
+         Day = if_else(`D/N` == "D", 1,0),
+         across(where(is.character),as_factor))
+
+
+```
+
+\pagebreak
+
+## Exploratory Data Analysis
+
+### Distribution Analysis
+
+```{r}
+#| label: distribution of response variable
+
+baseball %>% 
+  ggplot(aes(x = Result)) +
+  geom_histogram(stat = 'count') + 
+  labs(
+    x = "Win or Loss",
+    y = "Count",
+    title = "Distribution of our Response Variable"
+  )
+```
+
+We randomly selected six team that have lost more than won. This can be an issue with logistic regression, but there are ways to fix it as seen in the recipe step.
+
+### Correlation Analysis
+
+```{r}
+#| label: eda
+#| warning: FALSE
+
+correlation_table <- baseball %>% 
+  correlate() %>% 
+  select(term,Won) %>% 
+  drop_na()
+
+correlation_table %>% 
+  ggplot(aes(x = fct_reorder(term, Won), y = Won)) +
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  ylim(-1,1) +
+  labs(
+    x = "Potential Predictor",
+    y = "Correlation Coefficient",
+    title = "Predictors' Correlation with the a Win"
+  )
+
+# change won to factor
+baseball <- baseball %>% 
+  mutate(Won = as_factor(Won))
+```
+
+The correlation graph mostly makes sense. Runs are highly positively correlated with a win, while runs against are highly negatively correlated with the winning a baseball game.
+
+## Modeling
+
+### Training/testing split
+
+```{r}
+#| label: initial-split
+set.seed(123)
+baseball_split <- initial_split(baseball)
+baseball_training <- training(baseball_split)
+baseball_testing <- testing(baseball_split)
+```
+
+### Specify a Model
+
+```{r}
+#| label: specify a model
+
+baseball_spec <- logistic_reg() %>%
+  set_engine("glm")
+
+```
+
+### Recipe 1
+
+```{r}
+#| label: recipe-1
+
+bball_rec_1 <- recipe(Won ~ Rank + Date, data = baseball_training) %>% 
+  update_role(Date, new_role = "id variable") %>% 
+  step_dummy(all_nominal_predictors()) %>% # dummy coding
+  step_zv(all_predictors()) # remove zero variance variables
+
+bball_rec_1
+```
+
+### Recipe 2
+
+```{r}
+#| label: recipe-2
+
+bball_rec_2 <- recipe(Won ~ Date + Rank + cLI, data = baseball_training) %>% 
+  update_role(Date, new_role = "id variable") %>% 
+  step_dummy(all_nominal_predictors()) %>% # dummy coding
+  step_zv(all_predictors()) # remove zero variance variables
+
+bball_rec_2
+```
+
+### Recipe 3
+
+```{r}
+#| label: recipe-3
+
+bball_rec_3 <- recipe(Won ~ Date + Rank + cLI + Day, data = baseball_training) %>% 
+  update_role(Date, new_role = "id variable") %>% 
+  step_dummy(all_nominal_predictors()) %>% # dummy coding
+  step_zv(all_predictors()) # remove zero variance variables
+```
+
+### Create Workflows
+
+```{r}
+#| label: create-workflows
+
+
+# workflow brings together recipe and model
+bball_wflow1 <- workflow() %>%
+  add_model(baseball_spec) %>%
+  add_recipe(bball_rec_1)
+
+# workflow brings together recipe and model
+bball_wflow2 <- workflow() %>%
+  add_model(baseball_spec) %>%
+  add_recipe(bball_rec_2)
+
+bball_wflow3 <- workflow() %>%
+  add_model(baseball_spec) %>%
+  add_recipe(bball_rec_3)
+```
+
+### Perform Cross Validation
+
+```{r}
+#| label: cv
+
+set.seed(345) # set seed
+
+baseball_folds <- vfold_cv(baseball_training, v = 5) # split up data into 5 partitions
+
+bball_fit_cv1 <- bball_wflow1 %>% 
+  fit_resamples(baseball_folds,
+                control = control_resamples(save_pred = TRUE)) # fit all the folds using recipe 1
+
+bball_fit_cv2 <- bball_wflow2 %>% 
+  fit_resamples(baseball_folds,
+                control = control_resamples(save_pred = TRUE)) # fit all the folds using recipe 2
+
+bball_fit_cv3 <- bball_wflow3 %>% 
+  fit_resamples(baseball_folds,
+                control = control_resamples(save_pred = TRUE)) # fit all the folds using recipe 3
+```
+
+```{r}
+#| label: cv-summarize
+collect_metrics(bball_fit_cv1) %>% 
+  select(.metric,mean) %>% 
+  kable(digits = 3)
+
+collect_metrics(bball_fit_cv2) %>% 
+  select(.metric,mean) %>% 
+  kable(digits = 3)
+
+collect_metrics(bball_fit_cv3) %>% 
+  select(.metric,mean) %>% 
+  kable(digits = 3)
+```
+
+### Visualizing the ROC Curve
+
+Recipe 1 through 3 shown below.
+
+```{r}
+#| label: roc_curve
+p1 <- bball_fit_cv1 %>%
+  collect_predictions() %>% 
+  group_by(id) %>%
+  roc_curve(
+    truth = Won,
+    .pred_0
+  ) %>%
+  autoplot()
+
+p2 <- bball_fit_cv2 %>%
+  collect_predictions() %>% 
+  group_by(id) %>%
+  roc_curve(
+    truth = Won,
+    .pred_0
+  ) %>%
+  autoplot()
+
+p3 <- bball_fit_cv3 %>%
+  collect_predictions() %>% 
+  group_by(id) %>%
+  roc_curve(
+    truth = Won,
+    .pred_0
+  ) %>%
+  autoplot()
+
+p1
+p2
+p3
+```
+
+## Model Selection
+
+Clearly Model 1 is the best model and also the most parsimonious. It has the most consistent ROC Curve, and the highest metrics for accuracy.
+
+## Apply Model to testing Data
+
+```{r}
+
+final_fit <- last_fit(
+  bball_wflow1, 
+  split = baseball_split
+  )
+
+collect_predictions(final_fit) %>%
+  conf_mat(Won, .pred_class)
+
+collect_metrics(final_fit) %>% 
+  kable(digits = 3)
+```
+
+By simply looking at the baseball's team rank in their respective division, we can achieve a 61.7% accuracy in predicting whether the baseball team will win or lose.
