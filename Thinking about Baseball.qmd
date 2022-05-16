@@ -305,9 +305,9 @@ p3 <- bball_fit_cv3 %>%
   ) %>%
   autoplot()
 
-p1
-p2
-p3
+p1 # recipe 1
+p2 # recipe 2
+p3 # recipe 3
 ```
 
 ## Model Selection
