@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.454">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Chase Mathis">
+  <title>More Useful Model</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="good data_files/libs/clipboard/clipboard.min.js"></script>
+  <script src="good data_files/libs/quarto-html/quarto.js"></script>
+  <script src="good data_files/libs/quarto-html/popper.min.js"></script>
+  <script src="good data_files/libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="good data_files/libs/quarto-html/anchor.min.js"></script>
+  <link href="good data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="good data_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="good data_files/libs/bootstrap/bootstrap.min.js"></script>
+  <link href="good data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="good data_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="quarto-content" class="container-fluid page-layout-article">
+<div class="page-columns">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <div id="quarto-toc-target"></div>
+</div>
+<main class="content">
+<header id="title-block-header">
+<h1 class="title display-7">More Useful Model</h1>
+<p class="author">Chase Mathis</p>
+</header>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<ul>
+<li><p>Need better ways to predict baseball. Can’t rely on rank alone as seen in the last model.</p></li>
+<li><p>Should take into account odds or maybe predict odds.</p></li>
+<li><p>Better data source</p></li>
+</ul>
+</section>
+<section id="import-packages-and-data" class="level2">
+<h2 class="anchored" data-anchor-id="import-packages-and-data">Import Packages and Data</h2>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># data wrangling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.7     ✔ dplyr   1.0.9
+✔ tidyr   1.2.0     ✔ stringr 1.4.0
+✔ readr   2.1.1     ✔ forcats 0.5.1</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels) <span class="co"># modeling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'tune':
+  method                   from   
+  required_pkgs.model_spec parsnip</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 0.1.4 ──</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>✔ broom        0.7.11     ✔ rsample      0.1.1 
+✔ dials        0.1.0      ✔ tune         0.1.6 
+✔ infer        1.0.0      ✔ workflows    0.2.4 
+✔ modeldata    0.1.1      ✔ workflowsets 0.1.0 
+✔ parsnip      0.1.7      ✔ yardstick    0.0.9 
+✔ recipes      0.2.0      </code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ scales::discard() masks purrr::discard()
+✖ dplyr::filter()   masks stats::filter()
+✖ recipes::fixed()  masks stringr::fixed()
+✖ dplyr::lag()      masks stats::lag()
+✖ yardstick::spec() masks readr::spec()
+✖ recipes::step()   masks stats::step()
+• Search for functions across packages at https://www.tidymodels.org/find/</code></pre>
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(baseballr) <span class="co"># api for baseball data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr) <span class="co"># output</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># graphs</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrr)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS) <span class="co">#stepaic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>
+Attaching package: 'MASS'</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>The following object is masked from 'package:patchwork':
+
+    area</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    select</code></pre>
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">15</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>season2018 <span class="ot">&lt;-</span> <span class="fu">mlb_schedule</span>(<span class="at">season =</span> <span class="st">"2018"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>season2019 <span class="ot">&lt;-</span> <span class="fu">mlb_schedule</span>(<span class="at">season =</span> <span class="st">"2019"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>season2020 <span class="ot">&lt;-</span> <span class="fu">mlb_schedule</span>(<span class="at">season =</span> <span class="st">"2020"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>season2021 <span class="ot">&lt;-</span> <span class="fu">mlb_schedule</span>(<span class="at">season =</span> <span class="st">"2021"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>baseball <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(season2018,season2019,season2020,season2021)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>gms_today <span class="ot">&lt;-</span> <span class="fu">mlb_schedule</span>(<span class="at">season =</span> <span class="st">'2022'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">==</span> <span class="fu">Sys.Date</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="clean-data" class="level3">
+<h3 class="anchored" data-anchor-id="clean-data">Clean Data</h3>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>baseball <span class="ot">&lt;-</span> baseball <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(series_description <span class="sc">==</span> <span class="st">'Regular Season'</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>         status_detailed_state <span class="sc">==</span> <span class="st">"Final"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(date, game_pk, season, game_number,double_header,day_night,scheduled_innings,games_in_series,series_game_number,<span class="fu">contains</span>(<span class="st">'record_pct'</span>), teams_home_is_winner) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character),as.factor),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">perc_series =</span> series_game_number<span class="sc">/</span>games_in_series,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">where</span>(is.logical),as.factor)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>(<span class="fu">contains</span>(<span class="st">'link'</span>) <span class="sc">|</span> <span class="fu">contains</span>(<span class="st">'score'</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="exploratory-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>baseball <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(teams_home_is_winner) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> teams_home_is_winner)) <span class="sc">+</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">stat =</span> <span class="st">'count'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>Warning: Ignoring unknown parameters: binwidth, bins, pad</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="good-data_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+
+</div>
+<p>Home teams win 53.381% of the time.</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>baseball <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">target =</span> <span class="fu">if_else</span>(teams_home_is_winner <span class="sc">==</span> <span class="st">"TRUE"</span>,<span class="dv">1</span>,<span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(term,target) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(term,target), <span class="at">y =</span> target)) <span class="sc">+</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>Non-numeric variables removed from input: `date`, `season`, `double_header`, `day_night`, `teams_away_league_record_pct`, `teams_home_league_record_pct`, and `teams_home_is_winner`
+Correlation computed with
+• Method: 'pearson'
+• Missing treated using: 'pairwise.complete.obs'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="good-data_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="modeling" class="level2">
+<h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
+<section id="split-into-training-and-testing-data" class="level3">
+<h3 class="anchored" data-anchor-id="split-into-training-and-testing-data">Split into Training and Testing Data</h3>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>baseball_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(baseball)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>baseball_train <span class="ot">&lt;-</span> <span class="fu">training</span>(baseball_split)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>baseball_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(baseball_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="variable-selection" class="level3">
+<h3 class="anchored" data-anchor-id="variable-selection">Variable selection</h3>
+<p>Recipe to further mutate data.</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rec_0 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(teams_home_is_winner <span class="sc">~</span> ., <span class="at">data =</span> baseball_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">teams_home_league_record_pct =</span> <span class="fu">as.double</span>(teams_home_league_record_pct)) <span class="sc">%&gt;%</span>   <span class="fu">step_mutate</span>(<span class="at">teams_away_league_record_pct =</span> <span class="fu">as.double</span>(teams_away_league_record_pct)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">perc_series =</span> series_game_number<span class="sc">/</span>games_in_series) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_center</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_date</span>(date) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_role</span>(date, <span class="at">new_role =</span> <span class="st">'id'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>rec_0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>Recipe
+
+Inputs:
+
+      role #variables
+        id          1
+   outcome          1
+ predictor         11
+
+Operations:
+
+Zero variance filter on all_predictors()
+Variable mutation for as.Date(date)
+Variable mutation for as.double(teams_home_league_record_pct)
+Variable mutation for as.double(teams_away_league_record_pct)
+Variable mutation for series_game_number / games_in_series
+Centering for all_numeric_predictors()
+Date features from date
+Dummy variables from all_nominal_predictors()</code></pre>
+</div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>trained_rec_0 <span class="ot">&lt;-</span> rec_0 <span class="sc">%&gt;%</span> <span class="fu">prep</span>(<span class="at">training =</span> baseball_train)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>baseball_train <span class="ot">&lt;-</span> <span class="fu">bake</span>(trained_rec_0, <span class="at">new_data =</span> baseball_train)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>baseball_test<span class="ot">&lt;-</span> <span class="fu">bake</span>(trained_rec_0, <span class="at">new_data =</span> baseball_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using <code>MASS::stepAIC</code></p>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>logit_reg <span class="ot">&lt;-</span> <span class="fu">glm</span>(teams_home_is_winner <span class="sc">~</span> ., <span class="at">family =</span> binomial, <span class="at">data =</span> baseball_train)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">stepAIC</span>(logit_reg, <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">upper =</span> <span class="sc">~</span>., <span class="at">lower =</span> <span class="sc">~</span><span class="dv">1</span>), <span class="at">direction =</span> <span class="st">'backward'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>Start:  AIC=7837.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + season_X2021 + double_header_S + 
+    double_header_Y + day_night_night + date_dow_Mon + date_dow_Tue + 
+    date_dow_Wed + date_dow_Thu + date_dow_Fri + date_dow_Sat + 
+    date_month_Feb + date_month_Mar + date_month_Apr + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep + 
+    date_month_Oct + date_month_Nov + date_month_Dec
+
+
+Step:  AIC=7837.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + season_X2021 + double_header_S + 
+    double_header_Y + day_night_night + date_dow_Mon + date_dow_Tue + 
+    date_dow_Wed + date_dow_Thu + date_dow_Fri + date_dow_Sat + 
+    date_month_Feb + date_month_Mar + date_month_Apr + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep + 
+    date_month_Oct + date_month_Nov
+
+
+Step:  AIC=7837.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + season_X2021 + double_header_S + 
+    double_header_Y + day_night_night + date_dow_Mon + date_dow_Tue + 
+    date_dow_Wed + date_dow_Thu + date_dow_Fri + date_dow_Sat + 
+    date_month_Feb + date_month_Mar + date_month_Apr + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep + 
+    date_month_Oct
+
+
+Step:  AIC=7837.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + season_X2021 + double_header_S + 
+    double_header_Y + day_night_night + date_dow_Mon + date_dow_Tue + 
+    date_dow_Wed + date_dow_Thu + date_dow_Fri + date_dow_Sat + 
+    date_month_Feb + date_month_Mar + date_month_Apr + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep
+
+
+Step:  AIC=7837.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + season_X2021 + double_header_S + 
+    double_header_Y + day_night_night + date_dow_Mon + date_dow_Tue + 
+    date_dow_Wed + date_dow_Thu + date_dow_Fri + date_dow_Sat + 
+    date_month_Mar + date_month_Apr + date_month_May + date_month_Jun + 
+    date_month_Jul + date_month_Aug + date_month_Sep
+
+
+Step:  AIC=7837.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + double_header_Y + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_dow_Fri + date_dow_Sat + date_month_Mar + 
+    date_month_Apr + date_month_May + date_month_Jun + date_month_Jul + 
+    date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_month_Apr                1   7779.1 7835.1
+- date_month_Mar                1   7779.1 7835.1
+- date_month_May                1   7779.2 7835.2
+- date                          1   7779.2 7835.2
+- date_dow_Sat                  1   7779.2 7835.2
+- date_month_Jul                1   7779.2 7835.2
+- date_dow_Thu                  1   7779.3 7835.3
+- date_year                     1   7779.3 7835.3
+- date_month_Jun                1   7779.3 7835.3
+- date_month_Sep                1   7779.4 7835.4
+- day_night_night               1   7779.4 7835.4
+- date_dow_Fri                  1   7779.4 7835.4
+- date_month_Aug                1   7779.4 7835.4
+- double_header_Y               1   7779.5 7835.5
+- date_dow_Tue                  1   7779.5 7835.5
+- series_game_number            1   7779.7 7835.7
+- season_X2020                  1   7779.8 7835.8
+- games_in_series               1   7779.8 7835.8
+- date_dow_Wed                  1   7779.8 7835.8
+- game_pk                       1   7779.8 7835.8
+- scheduled_innings             1   7779.8 7835.8
+- perc_series                   1   7780.1 7836.1
+- season_X2019                  1   7780.4 7836.4
+- double_header_S               1   7781.1 7837.1
+- date_dow_Mon                  1   7781.1 7837.1
+&lt;none&gt;                              7779.1 7837.1
+- game_number                   1   7781.4 7837.4
+- teams_home_league_record_pct  1   7996.6 8052.6
+- teams_away_league_record_pct  1   8105.8 8161.8
+
+Step:  AIC=7835.13
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + double_header_Y + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_dow_Fri + date_dow_Sat + date_month_Mar + 
+    date_month_May + date_month_Jun + date_month_Jul + date_month_Aug + 
+    date_month_Sep
+
+                               Df Deviance    AIC
+- date_dow_Sat                  1   7779.2 7833.2
+- date_month_Mar                1   7779.2 7833.2
+- date                          1   7779.2 7833.2
+- date_dow_Thu                  1   7779.3 7833.3
+- day_night_night               1   7779.4 7833.4
+- date_year                     1   7779.4 7833.4
+- date_dow_Fri                  1   7779.4 7833.4
+- double_header_Y               1   7779.5 7833.5
+- date_month_Sep                1   7779.5 7833.5
+- date_dow_Tue                  1   7779.5 7833.5
+- date_month_Jul                1   7779.5 7833.5
+- series_game_number            1   7779.7 7833.7
+- date_month_May                1   7779.7 7833.7
+- season_X2020                  1   7779.8 7833.8
+- games_in_series               1   7779.8 7833.8
+- date_dow_Wed                  1   7779.8 7833.8
+- game_pk                       1   7779.8 7833.8
+- scheduled_innings             1   7779.8 7833.8
+- date_month_Aug                1   7779.9 7833.9
+- perc_series                   1   7780.1 7834.1
+- season_X2019                  1   7780.4 7834.4
+- double_header_S               1   7781.1 7835.1
+- date_dow_Mon                  1   7781.1 7835.1
+&lt;none&gt;                              7779.1 7835.1
+- game_number                   1   7781.4 7835.4
+- date_month_Jun                1   7781.5 7835.5
+- teams_home_league_record_pct  1   7996.7 8050.7
+- teams_away_league_record_pct  1   8105.8 8159.8
+
+Step:  AIC=7833.19
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + double_header_Y + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_dow_Fri + date_month_Mar + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_month_Mar                1   7779.3 7831.3
+- date                          1   7779.3 7831.3
+- date_dow_Fri                  1   7779.4 7831.4
+- date_year                     1   7779.4 7831.4
+- day_night_night               1   7779.5 7831.5
+- date_dow_Thu                  1   7779.6 7831.6
+- double_header_Y               1   7779.6 7831.6
+- date_month_Sep                1   7779.6 7831.6
+- date_month_Jul                1   7779.6 7831.6
+- series_game_number            1   7779.7 7831.7
+- date_month_May                1   7779.8 7831.8
+- games_in_series               1   7779.8 7831.8
+- season_X2020                  1   7779.8 7831.8
+- game_pk                       1   7779.9 7831.9
+- scheduled_innings             1   7779.9 7831.9
+- date_month_Aug                1   7780.0 7832.0
+- perc_series                   1   7780.1 7832.1
+- date_dow_Tue                  1   7780.3 7832.3
+- season_X2019                  1   7780.4 7832.4
+- date_dow_Wed                  1   7780.5 7832.5
+- double_header_S               1   7781.1 7833.1
+&lt;none&gt;                              7779.2 7833.2
+- game_number                   1   7781.5 7833.5
+- date_month_Jun                1   7781.6 7833.6
+- date_dow_Mon                  1   7781.8 7833.8
+- teams_home_league_record_pct  1   7996.7 8048.7
+- teams_away_league_record_pct  1   8105.9 8157.9
+
+Step:  AIC=7831.26
+teams_home_is_winner ~ date + game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + double_header_Y + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_dow_Fri + date_month_May + date_month_Jun + 
+    date_month_Jul + date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date                          1   7779.3 7829.3
+- date_dow_Fri                  1   7779.5 7829.5
+- date_year                     1   7779.5 7829.5
+- day_night_night               1   7779.6 7829.6
+- date_dow_Thu                  1   7779.6 7829.6
+- double_header_Y               1   7779.6 7829.6
+- date_month_Sep                1   7779.6 7829.6
+- date_month_Jul                1   7779.7 7829.7
+- series_game_number            1   7779.8 7829.8
+- games_in_series               1   7779.9 7829.9
+- season_X2020                  1   7779.9 7829.9
+- date_month_May                1   7779.9 7829.9
+- game_pk                       1   7780.0 7830.0
+- scheduled_innings             1   7780.0 7830.0
+- date_month_Aug                1   7780.1 7830.1
+- perc_series                   1   7780.2 7830.2
+- date_dow_Tue                  1   7780.4 7830.4
+- season_X2019                  1   7780.5 7830.5
+- date_dow_Wed                  1   7780.5 7830.5
+- double_header_S               1   7781.2 7831.2
+&lt;none&gt;                              7779.3 7831.3
+- game_number                   1   7781.6 7831.6
+- date_month_Jun                1   7781.7 7831.7
+- date_dow_Mon                  1   7781.9 7831.9
+- teams_home_league_record_pct  1   7996.8 8046.8
+- teams_away_league_record_pct  1   8105.9 8155.9
+
+Step:  AIC=7829.34
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + double_header_Y + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_dow_Fri + date_month_May + date_month_Jun + 
+    date_month_Jul + date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_dow_Fri                  1   7779.6 7827.6
+- day_night_night               1   7779.7 7827.7
+- date_dow_Thu                  1   7779.7 7827.7
+- double_header_Y               1   7779.7 7827.7
+- date_month_Jul                1   7779.9 7827.9
+- series_game_number            1   7779.9 7827.9
+- date_month_May                1   7779.9 7827.9
+- season_X2020                  1   7779.9 7827.9
+- games_in_series               1   7780.0 7828.0
+- date_year                     1   7780.0 7828.0
+- game_pk                       1   7780.0 7828.0
+- scheduled_innings             1   7780.1 7828.1
+- perc_series                   1   7780.3 7828.3
+- date_month_Sep                1   7780.3 7828.3
+- date_dow_Tue                  1   7780.5 7828.5
+- season_X2019                  1   7780.6 7828.6
+- date_dow_Wed                  1   7780.6 7828.6
+- double_header_S               1   7781.3 7829.3
+&lt;none&gt;                              7779.3 7829.3
+- date_month_Aug                1   7781.6 7829.6
+- game_number                   1   7781.7 7829.7
+- date_dow_Mon                  1   7782.0 7830.0
+- date_month_Jun                1   7782.9 7830.9
+- teams_home_league_record_pct  1   7996.8 8044.8
+- teams_away_league_record_pct  1   8106.2 8154.2
+
+Step:  AIC=7827.55
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + double_header_Y + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_month_May + date_month_Jun + date_month_Jul + 
+    date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- double_header_Y               1   7779.9 7825.9
+- day_night_night               1   7780.0 7826.0
+- date_month_Jul                1   7780.1 7826.1
+- series_game_number            1   7780.1 7826.1
+- games_in_series               1   7780.1 7826.1
+- date_month_May                1   7780.1 7826.1
+- season_X2020                  1   7780.2 7826.2
+- date_dow_Thu                  1   7780.2 7826.2
+- date_year                     1   7780.2 7826.2
+- game_pk                       1   7780.3 7826.3
+- scheduled_innings             1   7780.3 7826.3
+- perc_series                   1   7780.4 7826.4
+- date_month_Sep                1   7780.5 7826.5
+- season_X2019                  1   7780.8 7826.8
+- date_dow_Wed                  1   7781.2 7827.2
+&lt;none&gt;                              7779.6 7827.6
+- double_header_S               1   7781.6 7827.6
+- date_month_Aug                1   7781.8 7827.8
+- date_dow_Tue                  1   7781.8 7827.8
+- game_number                   1   7782.0 7828.0
+- date_dow_Mon                  1   7782.3 7828.3
+- date_month_Jun                1   7783.1 7829.1
+- teams_home_league_record_pct  1   7996.9 8042.9
+- teams_away_league_record_pct  1   8106.4 8152.4
+
+Step:  AIC=7825.95
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    games_in_series + series_game_number + teams_away_league_record_pct + 
+    teams_home_league_record_pct + perc_series + date_year + 
+    season_X2019 + season_X2020 + double_header_S + day_night_night + 
+    date_dow_Mon + date_dow_Tue + date_dow_Wed + date_dow_Thu + 
+    date_month_May + date_month_Jun + date_month_Jul + date_month_Aug + 
+    date_month_Sep
+
+                               Df Deviance    AIC
+- series_game_number            1   7780.5 7824.5
+- date_month_Jul                1   7780.5 7824.5
+- games_in_series               1   7780.5 7824.5
+- date_month_May                1   7780.5 7824.5
+- day_night_night               1   7780.5 7824.5
+- season_X2020                  1   7780.6 7824.6
+- date_year                     1   7780.6 7824.6
+- date_dow_Thu                  1   7780.6 7824.6
+- game_pk                       1   7780.6 7824.6
+- perc_series                   1   7780.8 7824.8
+- date_month_Sep                1   7780.9 7824.9
+- season_X2019                  1   7781.2 7825.2
+- double_header_S               1   7781.6 7825.6
+- date_dow_Wed                  1   7781.7 7825.7
+&lt;none&gt;                              7779.9 7825.9
+- game_number                   1   7782.0 7826.0
+- date_month_Aug                1   7782.2 7826.2
+- date_dow_Tue                  1   7782.3 7826.3
+- date_dow_Mon                  1   7782.7 7826.7
+- scheduled_innings             1   7783.1 7827.1
+- date_month_Jun                1   7783.5 7827.5
+- teams_home_league_record_pct  1   7997.8 8041.8
+- teams_away_league_record_pct  1   8106.5 8150.5
+
+Step:  AIC=7824.45
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    games_in_series + teams_away_league_record_pct + teams_home_league_record_pct + 
+    perc_series + date_year + season_X2019 + season_X2020 + double_header_S + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_month_May + date_month_Jun + date_month_Jul + 
+    date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- games_in_series               1   7780.5 7822.5
+- date_dow_Thu                  1   7780.9 7822.9
+- date_month_Jul                1   7781.0 7823.0
+- date_month_May                1   7781.0 7823.0
+- day_night_night               1   7781.0 7823.0
+- season_X2020                  1   7781.1 7823.1
+- date_year                     1   7781.2 7823.2
+- perc_series                   1   7781.2 7823.2
+- game_pk                       1   7781.2 7823.2
+- date_month_Sep                1   7781.4 7823.4
+- season_X2019                  1   7781.8 7823.8
+- date_dow_Wed                  1   7781.9 7823.9
+- double_header_S               1   7782.1 7824.1
+&lt;none&gt;                              7780.5 7824.5
+- game_number                   1   7782.6 7824.6
+- date_month_Aug                1   7782.7 7824.7
+- date_dow_Tue                  1   7782.9 7824.9
+- date_dow_Mon                  1   7783.2 7825.2
+- scheduled_innings             1   7783.5 7825.5
+- date_month_Jun                1   7784.0 7826.0
+- teams_home_league_record_pct  1   7998.3 8040.3
+- teams_away_league_record_pct  1   8106.8 8148.8
+
+Step:  AIC=7822.49
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    perc_series + date_year + season_X2019 + season_X2020 + double_header_S + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_dow_Thu + date_month_May + date_month_Jun + date_month_Jul + 
+    date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_dow_Thu                  1   7781.0 7821.0
+- date_month_Jul                1   7781.0 7821.0
+- date_month_May                1   7781.1 7821.1
+- day_night_night               1   7781.1 7821.1
+- season_X2020                  1   7781.1 7821.1
+- perc_series                   1   7781.2 7821.2
+- date_year                     1   7781.2 7821.2
+- game_pk                       1   7781.2 7821.2
+- date_month_Sep                1   7781.4 7821.4
+- season_X2019                  1   7781.8 7821.8
+- date_dow_Wed                  1   7782.1 7822.1
+- double_header_S               1   7782.1 7822.1
+&lt;none&gt;                              7780.5 7822.5
+- game_number                   1   7782.7 7822.7
+- date_month_Aug                1   7782.7 7822.7
+- date_dow_Mon                  1   7783.2 7823.2
+- date_dow_Tue                  1   7783.2 7823.2
+- scheduled_innings             1   7783.5 7823.5
+- date_month_Jun                1   7784.1 7824.1
+- teams_home_league_record_pct  1   7998.3 8038.3
+- teams_away_league_record_pct  1   8107.1 8147.1
+
+Step:  AIC=7820.96
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    perc_series + date_year + season_X2019 + season_X2020 + double_header_S + 
+    day_night_night + date_dow_Mon + date_dow_Tue + date_dow_Wed + 
+    date_month_May + date_month_Jun + date_month_Jul + date_month_Aug + 
+    date_month_Sep
+
+                               Df Deviance    AIC
+- day_night_night               1   7781.5 7819.5
+- date_month_May                1   7781.5 7819.5
+- date_month_Jul                1   7781.5 7819.5
+- perc_series                   1   7781.6 7819.6
+- season_X2020                  1   7781.6 7819.6
+- date_year                     1   7781.7 7819.7
+- game_pk                       1   7781.7 7819.7
+- date_month_Sep                1   7781.9 7819.9
+- date_dow_Wed                  1   7782.3 7820.3
+- season_X2019                  1   7782.3 7820.3
+- double_header_S               1   7782.5 7820.5
+&lt;none&gt;                              7781.0 7821.0
+- game_number                   1   7783.1 7821.1
+- date_month_Aug                1   7783.2 7821.2
+- date_dow_Tue                  1   7783.4 7821.4
+- scheduled_innings             1   7784.0 7822.0
+- date_dow_Mon                  1   7784.2 7822.2
+- date_month_Jun                1   7784.6 7822.6
+- teams_home_league_record_pct  1   7998.7 8036.7
+- teams_away_league_record_pct  1   8107.7 8145.7
+
+Step:  AIC=7819.5
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    perc_series + date_year + season_X2019 + season_X2020 + double_header_S + 
+    date_dow_Mon + date_dow_Tue + date_dow_Wed + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- perc_series                   1   7781.7 7817.7
+- date_month_May                1   7782.1 7818.1
+- date_month_Jul                1   7782.1 7818.1
+- season_X2020                  1   7782.1 7818.1
+- date_year                     1   7782.2 7818.2
+- game_pk                       1   7782.2 7818.2
+- date_dow_Wed                  1   7782.4 7818.4
+- date_month_Sep                1   7782.6 7818.6
+- season_X2019                  1   7782.8 7818.8
+- double_header_S               1   7783.3 7819.3
+&lt;none&gt;                              7781.5 7819.5
+- date_dow_Tue                  1   7783.5 7819.5
+- date_month_Aug                1   7783.9 7819.9
+- game_number                   1   7784.0 7820.0
+- date_dow_Mon                  1   7784.7 7820.7
+- scheduled_innings             1   7785.0 7821.0
+- date_month_Jun                1   7785.2 7821.2
+- teams_home_league_record_pct  1   7999.5 8035.5
+- teams_away_league_record_pct  1   8107.7 8143.7
+
+Step:  AIC=7817.71
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    date_year + season_X2019 + season_X2020 + double_header_S + 
+    date_dow_Mon + date_dow_Tue + date_dow_Wed + date_month_May + 
+    date_month_Jun + date_month_Jul + date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_month_May                1   7782.3 7816.3
+- date_month_Jul                1   7782.3 7816.3
+- season_X2020                  1   7782.4 7816.4
+- date_year                     1   7782.4 7816.4
+- game_pk                       1   7782.5 7816.5
+- date_dow_Wed                  1   7782.5 7816.5
+- date_month_Sep                1   7782.8 7816.8
+- season_X2019                  1   7783.1 7817.1
+- double_header_S               1   7783.6 7817.6
+&lt;none&gt;                              7781.7 7817.7
+- date_dow_Tue                  1   7784.1 7818.1
+- date_month_Aug                1   7784.1 7818.1
+- game_number                   1   7784.3 7818.3
+- date_dow_Mon                  1   7784.7 7818.7
+- scheduled_innings             1   7785.3 7819.3
+- date_month_Jun                1   7785.4 7819.4
+- teams_home_league_record_pct  1   7999.7 8033.7
+- teams_away_league_record_pct  1   8107.9 8141.9
+
+Step:  AIC=7816.29
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    date_year + season_X2019 + season_X2020 + double_header_S + 
+    date_dow_Mon + date_dow_Tue + date_dow_Wed + date_month_Jun + 
+    date_month_Jul + date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_month_Jul                1   7782.5 7814.5
+- date_month_Sep                1   7782.8 7814.8
+- season_X2020                  1   7783.0 7815.0
+- date_year                     1   7783.0 7815.0
+- date_dow_Wed                  1   7783.0 7815.0
+- game_pk                       1   7783.0 7815.0
+- season_X2019                  1   7783.6 7815.6
+- date_month_Aug                1   7784.1 7816.1
+- double_header_S               1   7784.2 7816.2
+&lt;none&gt;                              7782.3 7816.3
+- date_dow_Tue                  1   7784.7 7816.7
+- game_number                   1   7784.9 7816.9
+- date_dow_Mon                  1   7785.2 7817.2
+- date_month_Jun                1   7785.5 7817.5
+- scheduled_innings             1   7785.9 7817.9
+- teams_home_league_record_pct  1   8000.4 8032.4
+- teams_away_league_record_pct  1   8108.4 8140.4
+
+Step:  AIC=7814.49
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    date_year + season_X2019 + season_X2020 + double_header_S + 
+    date_dow_Mon + date_dow_Tue + date_dow_Wed + date_month_Jun + 
+    date_month_Aug + date_month_Sep
+
+                               Df Deviance    AIC
+- date_month_Sep                1   7782.9 7812.9
+- season_X2020                  1   7783.2 7813.2
+- date_year                     1   7783.2 7813.2
+- date_dow_Wed                  1   7783.2 7813.2
+- game_pk                       1   7783.3 7813.3
+- season_X2019                  1   7783.9 7813.9
+- date_month_Aug                1   7784.1 7814.1
+- double_header_S               1   7784.3 7814.3
+&lt;none&gt;                              7782.5 7814.5
+- date_dow_Tue                  1   7784.9 7814.9
+- game_number                   1   7785.1 7815.1
+- date_dow_Mon                  1   7785.4 7815.4
+- date_month_Jun                1   7785.5 7815.5
+- scheduled_innings             1   7786.1 7816.1
+- teams_home_league_record_pct  1   8000.7 8030.7
+- teams_away_league_record_pct  1   8108.4 8138.4
+
+Step:  AIC=7812.88
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    date_year + season_X2019 + season_X2020 + double_header_S + 
+    date_dow_Mon + date_dow_Tue + date_dow_Wed + date_month_Jun + 
+    date_month_Aug
+
+                               Df Deviance    AIC
+- season_X2020                  1   7783.5 7811.5
+- date_year                     1   7783.6 7811.6
+- date_dow_Wed                  1   7783.6 7811.6
+- game_pk                       1   7783.7 7811.7
+- date_month_Aug                1   7784.1 7812.1
+- season_X2019                  1   7784.3 7812.3
+- double_header_S               1   7784.7 7812.7
+&lt;none&gt;                              7782.9 7812.9
+- date_dow_Tue                  1   7785.3 7813.3
+- game_number                   1   7785.5 7813.5
+- date_month_Jun                1   7785.5 7813.5
+- date_dow_Mon                  1   7785.8 7813.8
+- scheduled_innings             1   7786.5 7814.5
+- teams_home_league_record_pct  1   8001.3 8029.3
+- teams_away_league_record_pct  1   8108.6 8136.6
+
+Step:  AIC=7811.52
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    date_year + season_X2019 + double_header_S + date_dow_Mon + 
+    date_dow_Tue + date_dow_Wed + date_month_Jun + date_month_Aug
+
+                               Df Deviance    AIC
+- date_year                     1   7783.8 7809.8
+- game_pk                       1   7784.1 7810.1
+- date_dow_Wed                  1   7784.3 7810.3
+- season_X2019                  1   7784.3 7810.3
+- date_month_Aug                1   7784.7 7810.7
+- double_header_S               1   7785.4 7811.4
+&lt;none&gt;                              7783.5 7811.5
+- date_dow_Tue                  1   7785.9 7811.9
+- game_number                   1   7786.2 7812.2
+- date_month_Jun                1   7786.2 7812.2
+- date_dow_Mon                  1   7786.5 7812.5
+- scheduled_innings             1   7787.2 7813.2
+- teams_home_league_record_pct  1   8004.4 8030.4
+- teams_away_league_record_pct  1   8108.9 8134.9
+
+Step:  AIC=7809.79
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    season_X2019 + double_header_S + date_dow_Mon + date_dow_Tue + 
+    date_dow_Wed + date_month_Jun + date_month_Aug
+
+                               Df Deviance    AIC
+- date_dow_Wed                  1   7784.5 7808.5
+- season_X2019                  1   7784.7 7808.7
+- game_pk                       1   7784.9 7808.9
+- date_month_Aug                1   7785.3 7809.3
+&lt;none&gt;                              7783.8 7809.8
+- double_header_S               1   7785.8 7809.8
+- date_dow_Tue                  1   7786.2 7810.2
+- date_month_Jun                1   7786.4 7810.4
+- game_number                   1   7786.5 7810.5
+- date_dow_Mon                  1   7786.8 7810.8
+- scheduled_innings             1   7787.2 7811.2
+- teams_home_league_record_pct  1   8004.9 8028.9
+- teams_away_league_record_pct  1   8109.5 8133.5
+
+Step:  AIC=7808.54
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    season_X2019 + double_header_S + date_dow_Mon + date_dow_Tue + 
+    date_month_Jun + date_month_Aug
+
+                               Df Deviance    AIC
+- season_X2019                  1   7785.4 7807.4
+- game_pk                       1   7785.6 7807.6
+- date_month_Aug                1   7786.0 7808.0
+- date_dow_Tue                  1   7786.5 7808.5
+&lt;none&gt;                              7784.5 7808.5
+- double_header_S               1   7786.6 7808.6
+- date_month_Jun                1   7787.1 7809.1
+- game_number                   1   7787.3 7809.3
+- scheduled_innings             1   7788.0 7810.0
+- date_dow_Mon                  1   7788.2 7810.2
+- teams_home_league_record_pct  1   8005.8 8027.8
+- teams_away_league_record_pct  1   8110.4 8132.4
+
+Step:  AIC=7807.43
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    double_header_S + date_dow_Mon + date_dow_Tue + date_month_Jun + 
+    date_month_Aug
+
+                               Df Deviance    AIC
+- date_month_Aug                1   7787.0 7807.0
+- game_pk                       1   7787.1 7807.1
+- date_dow_Tue                  1   7787.4 7807.4
+&lt;none&gt;                              7785.4 7807.4
+- double_header_S               1   7787.6 7807.6
+- date_month_Jun                1   7788.0 7808.0
+- game_number                   1   7788.2 7808.2
+- scheduled_innings             1   7788.7 7808.7
+- date_dow_Mon                  1   7789.1 7809.1
+- teams_home_league_record_pct  1   8006.5 8026.5
+- teams_away_league_record_pct  1   8111.7 8131.7
+
+Step:  AIC=7806.95
+teams_home_is_winner ~ game_pk + game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    double_header_S + date_dow_Mon + date_dow_Tue + date_month_Jun
+
+                               Df Deviance    AIC
+- game_pk                       1   7788.8 7806.8
+- date_month_Jun                1   7788.8 7806.8
+- date_dow_Tue                  1   7788.9 7806.9
+&lt;none&gt;                              7787.0 7807.0
+- double_header_S               1   7789.0 7807.0
+- game_number                   1   7789.7 7807.7
+- scheduled_innings             1   7790.1 7808.1
+- date_dow_Mon                  1   7790.6 7808.6
+- teams_home_league_record_pct  1   8008.2 8026.2
+- teams_away_league_record_pct  1   8113.1 8131.1
+
+Step:  AIC=7806.77
+teams_home_is_winner ~ game_number + scheduled_innings + teams_away_league_record_pct + 
+    teams_home_league_record_pct + double_header_S + date_dow_Mon + 
+    date_dow_Tue + date_month_Jun
+
+                               Df Deviance    AIC
+- date_month_Jun                1   7790.4 7806.4
+- date_dow_Tue                  1   7790.7 7806.7
+&lt;none&gt;                              7788.8 7806.8
+- double_header_S               1   7791.0 7807.0
+- scheduled_innings             1   7791.2 7807.2
+- game_number                   1   7791.3 7807.3
+- date_dow_Mon                  1   7792.3 7808.3
+- teams_home_league_record_pct  1   8010.2 8026.2
+- teams_away_league_record_pct  1   8115.1 8131.1
+
+Step:  AIC=7806.41
+teams_home_is_winner ~ game_number + scheduled_innings + teams_away_league_record_pct + 
+    teams_home_league_record_pct + double_header_S + date_dow_Mon + 
+    date_dow_Tue
+
+                               Df Deviance    AIC
+- date_dow_Tue                  1   7792.3 7806.3
+&lt;none&gt;                              7790.4 7806.4
+- double_header_S               1   7792.7 7806.7
+- game_number                   1   7792.9 7806.9
+- scheduled_innings             1   7792.9 7806.9
+- date_dow_Mon                  1   7793.8 7807.8
+- teams_home_league_record_pct  1   8012.0 8026.0
+- teams_away_league_record_pct  1   8116.0 8130.0
+
+Step:  AIC=7806.25
+teams_home_is_winner ~ game_number + scheduled_innings + teams_away_league_record_pct + 
+    teams_home_league_record_pct + double_header_S + date_dow_Mon
+
+                               Df Deviance    AIC
+&lt;none&gt;                              7792.3 7806.3
+- double_header_S               1   7794.6 7806.6
+- scheduled_innings             1   7794.7 7806.7
+- game_number                   1   7794.7 7806.7
+- date_dow_Mon                  1   7796.5 7808.5
+- teams_home_league_record_pct  1   8013.9 8025.9
+- teams_away_league_record_pct  1   8117.9 8129.9</code></pre>
+</div>
+<div class="cell-output-stdout">
+<pre><code>
+Call:  glm(formula = teams_home_is_winner ~ game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    double_header_S + date_dow_Mon, family = binomial, data = baseball_train)
+
+Coefficients:
+                 (Intercept)                   game_number  
+                    0.148911                      0.354029  
+           scheduled_innings  teams_away_league_record_pct  
+                    0.151013                     -0.004912  
+teams_home_league_record_pct               double_header_S  
+                    0.004021                     -0.358620  
+                date_dow_Mon  
+                    0.187768  
+
+Degrees of Freedom: 6133 Total (i.e. Null);  6127 Residual
+Null Deviance:      8472 
+Residual Deviance: 7792     AIC: 7806</code></pre>
+</div>
+</div>
+<p>Final formula: `</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(<span class="at">formula =</span> teams_home_is_winner <span class="sc">~</span> game_number <span class="sc">+</span> scheduled_innings <span class="sc">+</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    teams_away_league_record_pct <span class="sc">+</span> teams_home_league_record_pct <span class="sc">+</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    double_header_S <span class="sc">+</span> date_dow_Mon, <span class="at">family =</span> binomial, <span class="at">data =</span> step_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="lets-see-how-accurate-this-model-is" class="level2">
+<h2 class="anchored" data-anchor-id="lets-see-how-accurate-this-model-is">Let’s see how accurate this model is…</h2>
+<div class="cell">
+<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model_spec_1 <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rec_1 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(teams_home_is_winner <span class="sc">~</span> game_number <span class="sc">+</span> scheduled_innings <span class="sc">+</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    teams_away_league_record_pct <span class="sc">+</span> teams_home_league_record_pct <span class="sc">+</span> </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    double_header_S <span class="sc">+</span> date_dow_Mon, <span class="at">data =</span> baseball_train)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>w_flow_1 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_1) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model_spec_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="cross-validation">Cross Validation</h3>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1129</span>) <span class="co"># set seed</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>baseball_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(baseball_train, <span class="at">v =</span> <span class="dv">10</span>) <span class="co"># split up data into 5 partitions</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>baseball_fit_cv1 <span class="ot">&lt;-</span> w_flow_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit_resamples</span>(baseball_folds) <span class="co"># fit all the folds using recipe 1</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(baseball_fit_cv1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric  .estimator  mean     n std_err .config             
+  &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 accuracy binary     0.631    10 0.00692 Preprocessor1_Model1
+2 roc_auc  binary     0.680    10 0.00681 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="apply-to-testing-data" class="level2">
+<h2 class="anchored" data-anchor-id="apply-to-testing-data">Apply to testing data</h2>
+<div class="cell">
+<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>w_flow_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(baseball_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(<span class="at">new_data =</span> baseball_test) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(teams_home_is_winner,<span class="fu">contains</span>(<span class="st">'.pred'</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">correct =</span> <span class="fu">if_else</span>(teams_home_is_winner <span class="sc">==</span> .pred_class, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">accuracy =</span> <span class="fu">mean</span>(correct))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  accuracy
+     &lt;dbl&gt;
+1    0.632</code></pre>
+</div>
+</div>
+</section>
+<section id="apply-to-yesterdays-data" class="level2">
+<h2 class="anchored" data-anchor-id="apply-to-yesterdays-data">Apply to yesterday’s data</h2>
+<div class="cell">
+<div class="sourceCode" id="cb34"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gms_today &lt;- mlb_schedule(season = '2022') %&gt;% </span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   filter(date == Sys.Date()) %&gt;% </span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># gms_today &lt;- bake(trained_rec_0, new_data = gms_today)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</main>
+<!-- /main column -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /grid -->
+</div> <!-- /content -->
+
+
+</body></html>

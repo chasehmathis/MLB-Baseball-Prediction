@@ -64,12 +64,19 @@ teams <- standings %>%
   select(Tm) %>% 
   pull()
 
-astros0 <- team_results_bref("HOU", 2021) #baseball reference
-mets0 <- team_results_bref("NYM", 2021) #baseball reference
-marlins0 <- team_results_bref("MIA", 2021) #baseball reference
-nationals0 <- team_results_bref("WSN", 2021) #baseball reference
-pirates0 <- team_results_bref("PIT", 2021) #baseball reference
-diamond0 <- team_results_bref("ARI", 2021) #baseball reference
+#from baseball reference
+astros0 <- team_results_bref("HOU", 2021) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak))) # fixed so streak going into game is represented not streak after game
+mets0 <- team_results_bref("NYM", 2021) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+marlins0 <- team_results_bref("MIA", 2021) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+nationals0 <- team_results_bref("WSN", 2021) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+pirates0 <- team_results_bref("PIT", 2021) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+diamond0 <- team_results_bref("ARI", 2021) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
 
 
 baseball<-bind_rows(astros0,mets0,marlins0,nationals0,pirates0,diamond0)
@@ -177,17 +184,29 @@ baseball_spec <- logistic_reg() %>%
 
 ```
 
+### Recipe 0
+
+```{r}
+#| label: recipe-0
+
+bball_rec_0 <- recipe(Result ~ Rank + Date, data = baseball_training) %>% 
+  update_role(Date, new_role = "id variable") %>% 
+  themis::step_downsample() %>%  # downsample Win column
+  step_dummy(all_nominal_predictors()) %>% # dummy coding
+  step_zv(all_predictors()) # remove zero variance variables
+
+```
+
 ### Recipe 1
 
 ```{r}
 #| label: recipe-1
 
-bball_rec_1 <- recipe(Won ~ Rank + Date, data = baseball_training) %>% 
+bball_rec_1 <- recipe(Result ~ Streak + Rank + Date, data = baseball_training) %>% 
   update_role(Date, new_role = "id variable") %>% 
+  themis::step_downsample() %>%  # downsample Win column
   step_dummy(all_nominal_predictors()) %>% # dummy coding
   step_zv(all_predictors()) # remove zero variance variables
-
-bball_rec_1
 ```
 
 ### Recipe 2
@@ -195,12 +214,11 @@ bball_rec_1
 ```{r}
 #| label: recipe-2
 
-bball_rec_2 <- recipe(Won ~ Date + Rank + cLI, data = baseball_training) %>% 
+bball_rec_2 <- recipe(Result ~ Date + Streak + Rank + cLI, data = baseball_training) %>% 
   update_role(Date, new_role = "id variable") %>% 
+  themis::step_downsample() %>%  # downsample Win column
   step_dummy(all_nominal_predictors()) %>% # dummy coding
   step_zv(all_predictors()) # remove zero variance variables
-
-bball_rec_2
 ```
 
 ### Recipe 3
@@ -208,8 +226,9 @@ bball_rec_2
 ```{r}
 #| label: recipe-3
 
-bball_rec_3 <- recipe(Won ~ Date + Rank + cLI + Day, data = baseball_training) %>% 
+bball_rec_3 <- recipe(Result ~ Date + Rank + Streak + cLI + Day, data = baseball_training) %>% 
   update_role(Date, new_role = "id variable") %>% 
+  themis::step_downsample() %>%  # downsample Win column
   step_dummy(all_nominal_predictors()) %>% # dummy coding
   step_zv(all_predictors()) # remove zero variance variables
 ```
@@ -219,6 +238,10 @@ bball_rec_3 <- recipe(Won ~ Date + Rank + cLI + Day, data = baseball_training) %
 ```{r}
 #| label: create-workflows
 
+# workflow brings together recipe and model
+bball_wflow0 <- workflow() %>%
+  add_model(baseball_spec) %>%
+  add_recipe(bball_rec_0)
 
 # workflow brings together recipe and model
 bball_wflow1 <- workflow() %>%
@@ -244,6 +267,10 @@ set.seed(345) # set seed
 
 baseball_folds <- vfold_cv(baseball_training, v = 5) # split up data into 5 partitions
 
+bball_fit_cv0 <- bball_wflow0 %>% 
+  fit_resamples(baseball_folds,
+                control = control_resamples(save_pred = TRUE)) # fit all the folds using recipe 0
+
 bball_fit_cv1 <- bball_wflow1 %>% 
   fit_resamples(baseball_folds,
                 control = control_resamples(save_pred = TRUE)) # fit all the folds using recipe 1
@@ -259,6 +286,11 @@ bball_fit_cv3 <- bball_wflow3 %>%
 
 ```{r}
 #| label: cv-summarize
+
+collect_metrics(bball_fit_cv0) %>% 
+  select(.metric,mean) %>% 
+  kable(digits = 3)
+
 collect_metrics(bball_fit_cv1) %>% 
   select(.metric,mean) %>% 
   kable(digits = 3)
@@ -274,16 +306,26 @@ collect_metrics(bball_fit_cv3) %>%
 
 ### Visualizing the ROC Curve
 
-Recipe 1 through 3 shown below.
+Recipe 0 through 3 shown below.
 
 ```{r}
 #| label: roc_curve
+
+p0 <- bball_fit_cv0 %>% 
+  collect_predictions() %>% 
+  group_by(id) %>%
+  roc_curve(
+    truth = Result,
+    .pred_W
+  ) %>%
+  autoplot()
+
 p1 <- bball_fit_cv1 %>%
   collect_predictions() %>% 
   group_by(id) %>%
   roc_curve(
-    truth = Won,
-    .pred_0
+    truth = Result,
+    .pred_W
   ) %>%
   autoplot()
 
@@ -291,8 +333,8 @@ p2 <- bball_fit_cv2 %>%
   collect_predictions() %>% 
   group_by(id) %>%
   roc_curve(
-    truth = Won,
-    .pred_0
+    truth = Result,
+    .pred_W
   ) %>%
   autoplot()
 
@@ -300,11 +342,11 @@ p3 <- bball_fit_cv3 %>%
   collect_predictions() %>% 
   group_by(id) %>%
   roc_curve(
-    truth = Won,
-    .pred_0
+    truth = Result,
+    .pred_W
   ) %>%
   autoplot()
-
+p0
 p1 # recipe 1
 p2 # recipe 2
 p3 # recipe 3
@@ -324,10 +366,50 @@ final_fit <- last_fit(
   )
 
 collect_predictions(final_fit) %>%
-  conf_mat(Won, .pred_class)
+  conf_mat(Result, .pred_class)
 
 collect_metrics(final_fit) %>% 
   kable(digits = 3)
 ```
 
 By simply looking at the baseball's team rank in their respective division, we can achieve a 61.7% accuracy in predicting whether the baseball team will win or lose.
+
+## Apply Model to Data Today
+
+```{r}
+#| label: get-test-data
+
+#from baseball reference
+astros1 <- team_results_bref("HOU", 2022) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak))) # fixed so streak going into game is represented not streak after game
+mets1 <- team_results_bref("NYM", 2022) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+marlins1 <- team_results_bref("MIA", 2022) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+nationals1 <- team_results_bref("WSN", 2022) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+pirates1 <- team_results_bref("PIT", 2022) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+diamond1 <- team_results_bref("ARI", 2022) %>% 
+  mutate(Streak = if_else(is.na(lag(Streak)), 0, lag(Streak)))
+
+test_2022 <- bind_rows(astros1,mets1,marlins1,nationals1,pirates1,diamond1) %>% 
+  mutate(Result = if_else(str_detect(Result,"L"), "L", "W"))
+
+
+bball_wflow1 %>% 
+  fit(test_2022) %>% 
+  augment(new_data = test_2022) %>% 
+  select(Result,contains('pred')) %>% 
+  mutate(correct = if_else(Result == .pred_class, 1,0)) %>% 
+  summarise(mean(correct))
+
+
+```
+
+## Today's Games
+
+```{r}
+mlb_game_pks(Sys.Date()) %>% 
+  View()
+```

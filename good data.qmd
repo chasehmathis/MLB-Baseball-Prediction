@@ -1,0 +1,200 @@
+---
+title: "More Useful Model"
+author: "Chase Mathis"
+format: html
+editor: visual
+---
+
+## Introduction
+
+-   Need better ways to predict baseball. Can't rely on rank alone as seen in the last model.
+
+-   Should take into account odds or maybe predict odds.
+
+-   Better data source
+
+## Import Packages and Data
+
+```{r}
+library(tidyverse) # data wrangling
+library(tidymodels) # modeling
+library(baseballr) # api for baseball data
+library(knitr) # output
+library(patchwork) # graphs
+library(corrr)
+library(MASS) #stepaic
+
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 15))
+```
+
+### Data
+
+```{r}
+season2018 <- mlb_schedule(season = "2018")
+season2019 <- mlb_schedule(season = "2019")
+season2020 <- mlb_schedule(season = "2020")
+
+season2021 <- mlb_schedule(season = "2021")
+
+baseball <- bind_rows(season2018,season2019,season2020,season2021)
+
+
+gms_today <- mlb_schedule(season = '2022') %>% 
+  filter(date == Sys.Date())
+```
+
+### Clean Data
+
+```{r}
+
+baseball <- baseball %>% 
+  filter(series_description == 'Regular Season',
+         status_detailed_state == "Final") %>% 
+  dplyr::select(date, game_pk, season, game_number,double_header,day_night,scheduled_innings,games_in_series,series_game_number,contains('record_pct'), teams_home_is_winner) %>% 
+  mutate(across(where(is.character),as.factor),
+         perc_series = series_game_number/games_in_series,
+         across(where(is.logical),as.factor)) %>% 
+  dplyr::select(-(contains('link') | contains('score')))
+```
+
+## Exploratory Data Analysis
+
+```{r}
+baseball %>% 
+  dplyr::select(teams_home_is_winner) %>% 
+  ggplot(aes(x = teams_home_is_winner)) + 
+  geom_histogram(stat = 'count')
+```
+
+```{r}
+#| echo: false
+
+win_perc_home <- baseball %>% 
+  group_by(teams_home_is_winner) %>% 
+  count() %>% 
+  summarize(win_perc = n/nrow(baseball)) %>% 
+  filter(teams_home_is_winner == TRUE) %>% 
+  pull(win_perc)
+
+```
+
+Home teams win `r round(win_perc_home*100,3)`% of the time.
+
+```{r}
+baseball %>% 
+  mutate(target = if_else(teams_home_is_winner == "TRUE",1,0)) %>% 
+  correlate() %>% 
+  dplyr::select(term,target) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = fct_reorder(term,target), y = target)) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
+```
+
+## Modeling
+
+### Split into Training and Testing Data
+
+```{r}
+set.seed(123)
+baseball_split <- initial_split(baseball)
+baseball_train <- training(baseball_split)
+baseball_test <- testing(baseball_split)
+```
+
+### Variable selection
+
+Recipe to further mutate data.
+
+```{r}
+#| label: recipe-0
+
+rec_0 <- recipe(teams_home_is_winner ~ ., data = baseball_train) %>% 
+  step_zv(all_predictors()) %>% 
+  step_mutate(date = as.Date(date)) %>% 
+  step_mutate(teams_home_league_record_pct = as.double(teams_home_league_record_pct)) %>%   step_mutate(teams_away_league_record_pct = as.double(teams_away_league_record_pct)) %>%
+  step_mutate(perc_series = series_game_number/games_in_series) %>% 
+  step_center(all_numeric_predictors()) %>% 
+  step_date(date) %>% 
+  update_role(date, new_role = 'id') %>% 
+  step_dummy(all_nominal_predictors())
+
+rec_0
+trained_rec_0 <- rec_0 %>% prep(training = baseball_train)
+
+baseball_train <- bake(trained_rec_0, new_data = baseball_train)
+
+baseball_test<- bake(trained_rec_0, new_data = baseball_test)
+```
+
+Using `MASS::stepAIC`
+
+```{r}
+logit_reg <- glm(teams_home_is_winner ~ ., family = binomial, data = baseball_train)
+
+stepAIC(logit_reg, scope = list(upper = ~., lower = ~1), direction = 'backward')
+```
+
+Final formula: \`
+
+``` r
+glm(formula = teams_home_is_winner ~ game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    double_header_S + date_dow_Mon, family = binomial, data = step_df)
+```
+
+## Let's see how accurate this model is...
+
+```{r}
+#| label: recipe-1/wflow_1
+
+model_spec_1 <- logistic_reg() %>%
+  set_engine("glm")
+
+rec_1 <- recipe(teams_home_is_winner ~ game_number + scheduled_innings + 
+    teams_away_league_record_pct + teams_home_league_record_pct + 
+    double_header_S + date_dow_Mon, data = baseball_train)
+
+w_flow_1 <- workflow() %>% 
+  add_recipe(rec_1) %>% 
+  add_model(model_spec_1)
+```
+
+### Cross Validation
+
+```{r}
+#| label: cv
+
+set.seed(1129) # set seed
+
+baseball_folds <- vfold_cv(baseball_train, v = 10) # split up data into 5 partitions
+
+baseball_fit_cv1 <- w_flow_1 %>% 
+  fit_resamples(baseball_folds) # fit all the folds using recipe 1
+
+collect_metrics(baseball_fit_cv1)
+
+```
+
+## Apply to testing data
+
+```{r}
+#| label: test-data
+
+w_flow_1 %>% 
+  fit(baseball_train) %>% 
+  augment(new_data = baseball_test) %>% 
+  dplyr::select(teams_home_is_winner,contains('.pred')) %>% 
+  mutate(correct = if_else(teams_home_is_winner == .pred_class, 1, 0)) %>% 
+  summarize(accuracy = mean(correct))
+
+```
+
+## Apply to yesterday's data
+
+```{r}
+# gms_today <- mlb_schedule(season = '2022') %>% 
+#   filter(date == Sys.Date()) %>% 
+#   
+# gms_today <- bake(trained_rec_0, new_data = gms_today)
+```
